@@ -30,13 +30,15 @@ void	print_status(t_philo *philo, char *status)
 	pthread_mutex_unlock(&philo->data->print_mutex);
 }
 
-int	ft_atoi(const char *str)
+int	ft_atoi(const char *str, int *overflow)
 {
-	int	i;
-	int	result;
+	int			i;
+	long long	result;
 
 	i = 0;
 	result = 0;
+	if (overflow)
+		*overflow = 0;
 	while (str[i] == ' ' || (str[i] >= 9 && str[i] <= 13))
 		i++;
 	if (str[i] == '+')
@@ -44,15 +46,22 @@ int	ft_atoi(const char *str)
 	while (str[i] >= '0' && str[i] <= '9')
 	{
 		result = result * 10 + (str[i] - '0');
+		if (result > INT_MAX)
+		{
+			if (overflow)
+				*overflow = 1;
+			return (INT_MAX);
+		}
 		i++;
 	}
-	return (result);
+	return ((int)result);
 }
 
 int	valid_args(int argc, char **argv)
 {
 	int	i;
 	int	j;
+	int	overflow;
 
 	i = 1;
 	while (i < argc)
@@ -64,7 +73,7 @@ int	valid_args(int argc, char **argv)
 				return (0);
 			j++;
 		}
-		if (ft_atoi(argv[i]) <= 0)
+		if (ft_atoi(argv[i], &overflow) <= 0 || overflow)
 			return (0);
 		i++;
 	}

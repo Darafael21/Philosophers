@@ -1,15 +1,23 @@
 #include "philo.h"
 
-static void	join_threads(t_data *data)
+static void	join_threads(t_data *data, int count)
 {
 	int	i;
 
 	i = 0;
-	while (i < data->num_philos)
+	while (i < count)
 	{
 		pthread_join(data->philos[i].thread, NULL);
 		i++;
 	}
+}
+
+static void	abort_simulation(t_data *data, int count)
+{
+	pthread_mutex_lock(&data->print_mutex);
+	data->dead = 1;
+	pthread_mutex_unlock(&data->print_mutex);
+	join_threads(data, count);
 }
 
 int	start_simulation(t_data *data)
@@ -24,12 +32,18 @@ int	start_simulation(t_data *data)
 		data->philos[i].last_meal = data->start_time;
 		if (pthread_create(&data->philos[i].thread, NULL,
 				philo_routine, &data->philos[i]))
+		{
+			abort_simulation(data, i);
 			return (1);
+		}
 		i++;
 	}
 	if (pthread_create(&monitor, NULL, monitor_routine, data))
+	{
+		abort_simulation(data, data->num_philos);
 		return (1);
-	join_threads(data);
+	}
+	join_threads(data, data->num_philos);
 	pthread_join(monitor, NULL);
 	return (0);
 }
@@ -38,6 +52,7 @@ int	main(int argc, char **argv)
 {
 	t_data	data;
 
+	setbuf(stdout, NULL);
 	if (argc < 5 || argc > 6)
 	{
 		printf("Error: wrong number of arguments\n");
@@ -51,9 +66,11 @@ int	main(int argc, char **argv)
 	if (!init_data(&data, argc, argv))
 	{
 		printf("Error: initialization failed\n");
+		cleanup(&data);
 		return (1);
 	}
-	start_simulation(&data);
+	if (start_simulation(&data))
+		printf("Error: thread creation failed\n");
 	cleanup(&data);
 	return (0);
 }

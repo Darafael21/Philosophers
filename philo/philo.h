@@ -5,6 +5,7 @@
 # include <stdlib.h>
 # include <string.h>
 # include <unistd.h>
+# include <limits.h>
 # include <sys/time.h>
 # include <pthread.h>
 
@@ -46,7 +47,7 @@ typedef struct s_data
 long long	get_time(void);
 void		ft_usleep(long long ms);
 void		print_status(t_philo *philo, char *status);
-int			ft_atoi(const char *str);
+int			ft_atoi(const char *str, int *overflow);
 int			valid_args(int argc, char **argv);
 
 /* init.c */

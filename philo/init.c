@@ -55,13 +55,13 @@ int	init_philos(t_data *data)
 int	init_data(t_data *data, int argc, char **argv)
 {
 	memset(data, 0, sizeof(t_data));
-	data->num_philos = ft_atoi(argv[1]);
-	data->time_to_die = ft_atoi(argv[2]);
-	data->time_to_eat = ft_atoi(argv[3]);
-	data->time_to_sleep = ft_atoi(argv[4]);
+	data->num_philos = ft_atoi(argv[1], NULL);
+	data->time_to_die = ft_atoi(argv[2], NULL);
+	data->time_to_eat = ft_atoi(argv[3], NULL);
+	data->time_to_sleep = ft_atoi(argv[4], NULL);
 	data->must_eat = 0;
 	if (argc == 6)
-		data->must_eat = ft_atoi(argv[5]);
+		data->must_eat = ft_atoi(argv[5], NULL);
 	if (pthread_mutex_init(&data->print_mutex, NULL))
 		return (0);
 	if (!init_forks(data))

@@ -32,11 +32,11 @@ void	eat(t_philo *philo)
 		pthread_mutex_unlock(&philo->right_fork->mutex);
 		return ;
 	}
-	print_status(philo, "is eating");
 	pthread_mutex_lock(&philo->meal_mutex);
 	philo->last_meal = get_time();
 	philo->meals_eaten++;
 	pthread_mutex_unlock(&philo->meal_mutex);
+	print_status(philo, "is eating");
 	ft_usleep(philo->data->time_to_eat);
 	pthread_mutex_unlock(&philo->left_fork->mutex);
 	pthread_mutex_unlock(&philo->right_fork->mutex);
