@@ -6,7 +6,7 @@
 /*   By: darafael <darafael@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 20:05:28 by darafael          #+#    #+#             */
-/*   Updated: 2026/08/05 07:36:22 by darafael         ###   ########.fr       */
+/*   Updated: 2026/08/05 08:35:30 by darafael         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,7 +55,6 @@ typedef struct s_data
 	pthread_mutex_t	print_mutex;
 	int				print_mutex_ok;
 }	t_data;
-
 
 long long	get_time(void);
 void		ft_usleep(long long ms, t_data *data);
