@@ -6,7 +6,7 @@
 /*   By: darafael <darafael@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 20:04:54 by darafael          #+#    #+#             */
-/*   Updated: 2026/08/04 20:04:58 by darafael         ###   ########.fr       */
+/*   Updated: 2026/08/05 06:48:45 by darafael         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,7 @@ int	init_data(t_data *data, int argc, char **argv)
 		data->must_eat = ft_atoi(argv[5], NULL);
 	if (pthread_mutex_init(&data->print_mutex, NULL))
 		return (0);
+	data->print_mutex_ok = 1;
 	if (!init_forks(data))
 		return (0);
 	if (!init_philos(data))
@@ -99,7 +100,8 @@ void	cleanup(t_data *data)
 		pthread_mutex_destroy(&data->philos[i].meal_mutex);
 		i++;
 	}
-	pthread_mutex_destroy(&data->print_mutex);
+	if (data->print_mutex_ok)
+		pthread_mutex_destroy(&data->print_mutex);
 	free(data->forks);
 	free(data->philos);
 }

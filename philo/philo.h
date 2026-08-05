@@ -6,7 +6,7 @@
 /*   By: darafael <darafael@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 20:05:28 by darafael          #+#    #+#             */
-/*   Updated: 2026/08/04 20:05:30 by darafael         ###   ########.fr       */
+/*   Updated: 2026/08/05 07:36:22 by darafael         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,37 +53,30 @@ typedef struct s_data
 	t_philo			*philos;
 	t_fork			*forks;
 	pthread_mutex_t	print_mutex;
+	int				print_mutex_ok;
 }	t_data;
 
-/* utils.c */
+
 long long	get_time(void);
-void		ft_usleep(long long ms);
+void		ft_usleep(long long ms, t_data *data);
 void		print_status(t_philo *philo, char *status);
 int			ft_atoi(const char *str, int *overflow);
 int			valid_args(int argc, char **argv);
-
-/* init.c */
 int			init_data(t_data *data, int argc, char **argv);
 int			init_forks(t_data *data);
 int			init_philos(t_data *data);
 void		assign_forks(t_data *data);
 void		cleanup(t_data *data);
-
-/* routine.c */
 void		*philo_routine(void *arg);
 void		eat(t_philo *philo);
-void		take_forks(t_philo *philo);
+void		take_forks_not_wars(t_philo *philo);
 void		philo_sleep(t_philo *philo);
-void		one_philo(t_philo *philo);
-
-/* monitor.c */
+void		lonely_guy(t_philo *philo);
 void		*monitor_routine(void *arg);
 int			sim_stopped(t_data *data);
 int			check_philo_death(t_philo *philo);
 int			check_all_ate(t_data *data);
 void		kill_philo(t_philo *philo);
-
-/* main.c */
 int			start_simulation(t_data *data);
 
 #endif

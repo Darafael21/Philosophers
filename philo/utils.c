@@ -6,7 +6,7 @@
 /*   By: darafael <darafael@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 20:05:43 by darafael          #+#    #+#             */
-/*   Updated: 2026/08/04 20:05:45 by darafael         ###   ########.fr       */
+/*   Updated: 2026/08/05 06:53:14 by darafael         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,13 +20,17 @@ long long	get_time(void)
 	return ((tv.tv_sec * 1000) + (tv.tv_usec / 1000));
 }
 
-void	ft_usleep(long long ms)
+void	ft_usleep(long long ms, t_data *data)
 {
 	long long	start;
 
 	start = get_time();
 	while (get_time() - start < ms)
+	{
+		if (sim_stopped(data))
+			return ;
 		usleep(100);
+	}
 }
 
 void	print_status(t_philo *philo, char *status)
