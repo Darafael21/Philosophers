@@ -2,8 +2,6 @@
 
 ## Description
 
-This project is an implementation of the classic **Dining Philosophers** synchronization problem.
-
 One or more philosophers sit at a round table with a large bowl of spaghetti in the middle. There are as many forks as philosophers. Each philosopher must pick up both adjacent forks to eat. Philosophers cycle through eating, sleeping, and thinking. The simulation ends when a philosopher dies of starvation, or when all philosophers have eaten a required number of times.
 
 The mandatory part implements each philosopher as a **POSIX thread**, with each fork protected by a **mutex** to prevent data races.
@@ -12,7 +10,7 @@ The mandatory part implements each philosopher as a **POSIX thread**, with each 
 - A philosopher dies if they have not started eating within `time_to_die` ms of their last meal (or simulation start).
 - Philosophers do not communicate with each other.
 - Death must be reported within 10 ms of occurrence.
-- No global variables; no data races.
+- No global variables and no data races.
 
 ## Features
 
@@ -41,14 +39,7 @@ philo/
 
 ## Technical Choices
 
-- **Deadlock prevention:** forks are always picked up in a consistent order relative to fork index (lowest index first), so philosophers never all wait on the same fork simultaneously in a circular chain.
-- **Timing:** `gettimeofday` combined with a custom `get_time()` helper gives millisecond-precision timestamps; `ft_usleep` performs sleeping in short loops to stay responsive to the simulation-stop flag instead of one long blocking `usleep`.
-- **42 Norm compliance:** every function respects the constraints below, which were verified while writing and reviewing the code:
-  - Max 4 parameters per function
-  - Max 5 functions per file
-  - Max 25 lines per function
-  - No `for` loops (`while` only) and no ternary operators
-  - No global variables
+- **Deadlock prevention:** odd-numbered philosophers pick up their left fork first, even-numbered philosophers pick up their right fork first. This breaks the most obvious possible race condition.
 
 ## Instructions
 
@@ -62,7 +53,7 @@ make
 ### Execution
 
 ```bash
-./philo number_of_philosophers time_to_die time_to_eat time_to_sleep [number_of_times_each_philosopher_must_eat]
+valgrind --tool=helgrind ./philo number_of_philosophers time_to_die time_to_eat time_to_sleep [number_of_times_each_philosopher_must_eat]
 ```
 
 | Argument | Description |
@@ -118,5 +109,6 @@ valgrind --leak-check=full ./philo 5 800 200 200
 - [pthread_create(3) – Linux man page](https://man7.org/linux/man-pages/man3/pthread_create.3.html)
 - [gettimeofday(2) – Linux man page](https://man7.org/linux/man-pages/man2/gettimeofday.2.html)
 - [Helgrind: a thread error detector – Valgrind documentation](https://valgrind.org/docs/manual/hg-manual.html)
+- [Solving the Dining Philosophers Problem with Mutex Locks and C Programming](https://apoorvasn.medium.com/solving-the-dining-philosophers-problem-with-mutex-locks-and-c-programming-cee5ac8d35e7)
 
-**AI usage:** GitHub Copilot was used to assist with structuring synchronization logic, verifying deadlock-prevention reasoning (odd/even fork ordering), and reviewing line counts against the 42 Norm constraints. All code was reviewed, understood, and validated manually.
+**AI usage:** GitHub Copilot was used to assist with the README.md formatting, explaining the most important concepts like mutex, data races and race conditions.

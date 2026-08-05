@@ -6,7 +6,7 @@
 /*   By: darafael <darafael@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 20:05:03 by darafael          #+#    #+#             */
-/*   Updated: 2026/08/04 20:05:05 by darafael         ###   ########.fr       */
+/*   Updated: 2026/08/05 10:37:30 by darafael         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ static void	join_threads(t_data *data, int count)
 	}
 }
 
-static void	abort_simulation(t_data *data, int count)
+static void	abort_philosophing(t_data *data, int count)
 {
 	pthread_mutex_lock(&data->print_mutex);
 	data->dead = 1;
@@ -32,7 +32,7 @@ static void	abort_simulation(t_data *data, int count)
 	join_threads(data, count);
 }
 
-int	start_simulation(t_data *data)
+int	start_philosophing(t_data *data)
 {
 	pthread_t	monitor;
 	int			i;
@@ -45,14 +45,14 @@ int	start_simulation(t_data *data)
 		if (pthread_create(&data->philos[i].thread, NULL,
 				philo_routine, &data->philos[i]))
 		{
-			abort_simulation(data, i);
+			abort_philosophing(data, i);
 			return (1);
 		}
 		i++;
 	}
 	if (pthread_create(&monitor, NULL, monitor_routine, data))
 	{
-		abort_simulation(data, data->num_philos);
+		abort_philosophing(data, data->num_philos);
 		return (1);
 	}
 	join_threads(data, data->num_philos);
@@ -64,7 +64,6 @@ int	main(int argc, char **argv)
 {
 	t_data	data;
 
-	setbuf(stdout, NULL);
 	if (argc < 5 || argc > 6)
 	{
 		printf("Error: wrong number of arguments\n");
@@ -81,7 +80,7 @@ int	main(int argc, char **argv)
 		cleanup(&data);
 		return (1);
 	}
-	if (start_simulation(&data))
+	if (start_philosophing(&data))
 		printf("Error: thread creation failed\n");
 	cleanup(&data);
 	return (0);

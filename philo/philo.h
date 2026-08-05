@@ -6,7 +6,7 @@
 /*   By: darafael <darafael@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2026/08/04 20:05:28 by darafael          #+#    #+#             */
-/*   Updated: 2026/08/05 08:35:30 by darafael         ###   ########.fr       */
+/*   Updated: 2026/08/05 10:16:04 by darafael         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,6 +76,6 @@ int			sim_stopped(t_data *data);
 int			check_philo_death(t_philo *philo);
 int			check_all_ate(t_data *data);
 void		kill_philo(t_philo *philo);
-int			start_simulation(t_data *data);
+int			start_philosophing(t_data *data);
 
 #endif
